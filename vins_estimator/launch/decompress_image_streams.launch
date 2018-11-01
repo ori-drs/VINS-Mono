@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<launch>
+    <!--Decompress image stream-->
+    <node name="decomp_rs_color" pkg="image_transport" type="republish" output="screen" args="compressed in:=/realsense_d435/color/image_raw raw out:=/realsense_d435/color/image_raw"/>
+    <node name="decomp_rs_forward_color" pkg="image_transport" type="republish" output="screen" args="compressed in:=/realsense_d435_forward/color/image_raw raw out:=/realsense_d435_forward/color/image_raw"/>
+
+<!-- @todo: implement depth decompression.
+    <node name="decomp_rs_depth" pkg="image_transport" type="republish" output="screen" args="compressed in:=/realsense_d435/color/image_raw raw out:=/realsense_d435/color/image_raw"/>
+    <node name="decomp_rs_forward_depth" pkg="image_transport" type="republish" output="screen" args="compressed in:=/realsense_d435_forward/color/image_raw raw out:=/realsense_d435_forward/color/image_raw"/>
+-->
+</launch>

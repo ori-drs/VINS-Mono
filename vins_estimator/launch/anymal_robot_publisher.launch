@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <param name="use_sim_time" value="true" />
+
+  <!-- Load robot description -->
+  <include file="$(find anymal_boxy_description)/launch/load.launch">
+    <arg name="simulation"       value="false"/>
+    <arg name="velodyne"         value="true"/>
+    <arg name="realsense"        value="true"/>
+  </include>
+
+  <!-- Quadruped tf publisher -->
+  <include file="$(find quadruped_tf_publisher)/launch/quadruped_tf_publisher.launch"/>
+</launch>

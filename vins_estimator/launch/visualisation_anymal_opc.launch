@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<launch>
+  <!--NOTE: The "\-\-clock" argument needs to enabled when replaying the rosbag
+      (e.g. rosbag play \-\-clock my_file.bag -->
+
+  <!-- Load robot description -->
+  <include file="$(find anymal_boxy_description)/launch/load.launch">
+    <arg name="simulation"       value="false"/>
+    <arg name="velodyne"         value="true"/>
+    <arg name="realsense"        value="true"/>
+  </include>
+
+  <!-- Quadruped tf publisher -->
+  <include file="$(find quadruped_tf_publisher)/launch/quadruped_tf_publisher.launch"/>
+
+  <arg name="data_package"            default="gazebo_worlds"/>
+  <arg name="world"                   default="empty"/>
+  <arg name="rviz_config_path"        default="$(find vins_estimator)/rviz/anymal.rviz"/>
+  <arg name="rqt_perspective_path"    default="$(find anymal_b_navigation_ui)/config/rqt/rqt.perspective"/>
+
+  <!-- User interface -->
+  <include file="$(find anymal_boxy_ui)/launch/ui.launch">
+    <arg name="data_package"          value="$(arg data_package)"/>
+    <arg name="world"                 value="$(arg world)"/>
+    <arg name="rviz_config_path"      value="$(arg rviz_config_path)"/>
+    <arg name="rqt_perspective_path"  value="$(arg rqt_perspective_path)"/>
+    <arg name="tf_minimal"            value="false"/>
+  </include>
+
+</launch>

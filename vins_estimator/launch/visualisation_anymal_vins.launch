@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<launch>
+  <!--NOTE: The "\-\-clock" argument needs to enabled when replaying the rosbag
+      (e.g. rosbag play \-\-clock my_file.bag -->
+
+  <!-- Load robot description -->
+  <include file="$(find anymal_boxy_description)/launch/load.launch">
+    <arg name="simulation"       value="false"/>
+    <arg name="velodyne"         value="true"/>
+    <arg name="realsense"        value="true"/>
+  </include>
+
+  <!-- Quadruped tf publisher -->
+  <include file="$(find quadruped_tf_publisher)/launch/quadruped_tf_publisher.launch"/>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find vins_estimator)/rviz/anymal-vins.rviz"/>
+
+</launch>

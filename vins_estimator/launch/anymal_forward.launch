@@ -1,0 +1,29 @@
+<launch>
+    <arg name="config_path" default = "$(find vins_estimator)/../config/anymal/config_forward.yaml" />
+	  <!--<arg name="vins_path" default = "$(find feature_tracker)/../config/../" />-->
+    <arg name="vins_path" default = "not-used-but-needs-to-be-set" />
+
+    <node name="feature_tracker" pkg="feature_tracker" type="feature_tracker" output="log">
+        <param name="config_file" type="string" value="$(arg config_path)" />
+        <param name="vins_folder" type="string" value="$(arg vins_path)" />
+    </node>
+
+    <node name="vins_estimator" pkg="vins_estimator" type="vins_estimator" output="screen">
+       <param name="config_file" type="string" value="$(arg config_path)" />
+       <param name="vins_folder" type="string" value="$(arg vins_path)" />
+    </node>
+
+    <node name="pose_graph" pkg="pose_graph" type="pose_graph" output="screen">
+        <param name="config_file" type="string" value="$(arg config_path)" />
+        <param name="visualization_shift_x" type="int" value="0" />
+        <param name="visualization_shift_y" type="int" value="0" />
+        <param name="skip_cnt" type="int" value="0" />
+        <param name="skip_dis" type="double" value="0" />
+    </node>
+
+    <!--SYNTAX: static_transform_publisher x y z yaw pitch roll frame_id child_frame_id  period (milliseconds)-->
+    <node pkg="tf" type="static_transform_publisher" name="vinsmono_frame_remapper1" output="screen"  args="0 0 0.65 3.14159 0 0 /map /vinsmono/world 100" />
+
+    <!-- This helps to prevent vins-mono processing too many images and having very high latency. Throttle the input image to 10Hz. -->
+    <!--<node pkg="topic_tools" type="throttle" name="realsense_forward_throttle_node" output="screen" args="messages /realsense_d435_forward/color/image_raw 10" />-->
+</launch>

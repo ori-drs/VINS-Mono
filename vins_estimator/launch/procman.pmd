@@ -1,0 +1,78 @@
+group "0.ros_services" {
+    cmd "1.roscore" {
+      exec = "roscore";
+      host = "localhost";
+    }
+    cmd "2.load_robot_model" {
+      exec = "roslaunch vins_estimator anymal_robot_publisher.launch";
+      host = "localhost";
+    }
+    cmd "3.decompress_images" {
+        exec = "roslaunch vins_estimator decompress_image_streams.launch";
+        host = "localhost";
+    }
+}
+
+group "1.visualisations" {
+    cmd "visualisation_anymal" {
+        exec = "roslaunch vins_estimator visualisation_anymal_opc.launch";
+        host = "localhost";
+    }
+    cmd "visualisation_anymal_simple" {
+        exec = "roslaunch vins_estimator visualisation_anymal_simple.launch";
+        host = "localhost";
+    }
+    cmd "visualisation_anymal_vins" {
+        exec = "roslaunch vins_estimator visualisation_anymal_vins.launch";
+        host = "localhost";
+    }
+    cmd "vins-mono-rviz" {
+        exec = "roslaunch vins_estimator vins_rviz.launch";
+        host = "localhost";
+    }
+}
+
+group "2.vio_algorithms_anymal" {
+    cmd "6.vinsmono_anymal" {
+        exec = "roslaunch vins_estimator anymal_downward.launch";
+        host = "localhost";
+    }
+}
+
+group "2.vio_algorithms_anymal_forward" {
+    cmd "6.vinsmono_anymal_forward" {
+        exec = "roslaunch vins_estimator anymal_forward.launch";
+        host = "localhost";
+    }
+}
+
+group "3.bag-file" {
+    cmd "load-bag-file" {
+        exec = "rosbag play --clock --rate=1 /home/david/datastore/anymal/2018-09-21-fire-college/anymal_2018-09-21-16-04-29.bag";
+        host = "localhost";
+    }
+}
+
+script "compare_vio_algorithms_anymal" {
+    start cmd "1.roscore";
+    wait ms 1000;
+    start cmd "2.set_use_sim_time";
+    wait ms 1000;
+    start cmd "3.decompress_images";
+    start cmd "visualisation_anymal";
+    start cmd "6.vio_algorithms_anymal";
+}
+
+script "compare_vio_algorithms_anymal_forward" {
+    start cmd "1.roscore";
+    wait ms 1000;
+    start cmd "2.set_use_sim_time";
+    wait ms 1000;
+    start cmd "3.decompress_images";
+    start cmd "visualisation_anymal_simple";
+    start cmd "7.fovis_anymal_forward";
+    start cmd "6.vinsmono_anymal_forward";
+    start cmd "6.rovio_anymal_forward";
+    wait ms 1000;
+    start cmd "load-bag-file";
+}
